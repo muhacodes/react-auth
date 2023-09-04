@@ -12,13 +12,56 @@ fields.forEach((field) => (fieldsState[field.name] = ''));
 const Signup = ({ openModal }) => {
   const navigate = useNavigate();
   const [signupState, setSignupState] = useState(fieldsState);
+  const [validationErrors, setValidationErrors] = useState({});
 
-  const handleChange = (e) =>
+  // const handleChange = (e) =>
+  //   setSignupState({ ...signupState, [e.target.name]: e.target.value });
+  const handleChange = (e) => {
+    // Step 2: Clear the validation error for the changed field
+    setValidationErrors({
+      ...validationErrors,
+      [e.target.name]: '',
+    });
+
+    // Step 3: Update the form data
     setSignupState({ ...signupState, [e.target.name]: e.target.value });
+  };
+
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   createAccount();
+  // };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Step 4: Check for empty fields and set validation errors
+    const requiredFields = ['email', 'username', 'tel', 'address', 'password', 'confirmpassword'];
+    const newErrors = {};
+
+    requiredFields.forEach((field) => {
+      if (!signupState[field]) {
+        newErrors[field] = `${field.charAt(0).toUpperCase() + field.slice(1)} is required`;
+      }
+    });
+
+    // Check if passwords match
+    if (signupState.password !== signupState.confirmpassword) {
+      newErrors.confirmpassword = 'Passwords do not match';
+    }
+
+    if (signupState.password.length < 6) {
+      newErrors.password = 'Password must be at least 6 characters';
+    }
+
+    // Step 5: If there are validation errors, stop the submission
+    if (Object.keys(newErrors).length > 0) {
+      setValidationErrors(newErrors);
+      return;
+    }
     createAccount();
+
+    // Rest of your form submission logic
   };
 
   const createAccount = async () => {
@@ -33,10 +76,7 @@ const Signup = ({ openModal }) => {
       confirmpassword,
     };
 
-    if(password != confirmpassword){
-      alert('passwords don\'t match!');
-      return;
-    }
+    
 
     try {
       const response = await fetch('https://muhacodescustomauth.pythonanywhere.com/auth/users/register', {
@@ -64,11 +104,12 @@ const Signup = ({ openModal }) => {
 
   return (
     <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-      {fields.map((field) => (
+    {fields.map((field) => (
+      <div key={field.id}>
+        
         <Input
-          key={field.id}
           handleChange={handleChange}
-          value={signupState[field.id]}
+          value={signupState[field.name]}
           labelText={field.labelText}
           labelFor={field.labelFor}
           id={field.id}
@@ -77,9 +118,14 @@ const Signup = ({ openModal }) => {
           isRequired={field.isRequired}
           placeholder={field.placeholder}
         />
-      ))}
-      <FormAction handleSubmit={handleSubmit} text="Signup" />
-    </form>
+        {validationErrors[field.name] && (
+          // Step 6: Display validation errors if they exist
+          <p className="text-red-500 text-sm">{validationErrors[field.name]}</p>
+        )}
+      </div>
+    ))}
+    <FormAction handleSubmit={handleSubmit} text="Signup" />
+  </form>
   );
 };
 

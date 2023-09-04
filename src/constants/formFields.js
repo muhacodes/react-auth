@@ -29,7 +29,7 @@ const signupFields=[
         name:"username",
         type:"text",
         autoComplete:"username",
-        isRequired:true,
+        // isRequired:true,
         placeholder:"Username"   
     },
 
@@ -40,7 +40,7 @@ const signupFields=[
         name:"address",
         type:"text",
         autoComplete:"address",
-        isRequired:true,
+        // isRequired:true,
         placeholder:"Address"   
     },
 
@@ -51,7 +51,7 @@ const signupFields=[
         name:"tel",
         type:"text",
         autoComplete:"tel",
-        isRequired:true,
+        // isRequired:true,
         placeholder:"telephone "   
     },
 
@@ -62,7 +62,7 @@ const signupFields=[
         name:"email",
         type:"email",
         autoComplete:"email",
-        isRequired:true,
+        // isRequired:true,
         placeholder:"Email address"   
     },
     {
@@ -72,7 +72,7 @@ const signupFields=[
         name:"password",
         type:"password",
         autoComplete:"current-password",
-        isRequired:true,
+        // isRequired:true,
         placeholder:"Password"   
     },
     {
@@ -82,7 +82,7 @@ const signupFields=[
         name:"confirmpassword",
         type:"password",
         autoComplete:"confirm-password",
-        isRequired:true,
+        // isRequired:true,
         placeholder:"Confirm Password"   
     },
 ]
